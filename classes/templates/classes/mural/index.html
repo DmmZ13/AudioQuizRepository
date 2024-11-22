@@ -6,7 +6,6 @@
             <a href="{% url 'classes:flashcards' Classe.id %}">Flashcards</a>
             <a href="{% url 'classes:atividades_index' Classe.id %}">Atividades</a>
         </nav>
-
 </body>
 <hr>
 <section>
@@ -19,6 +18,9 @@
                     "{{ mensagem.conteudo }}"
                 </blockquote>
                 <figcaption>—{{ mensagem.usuario }}</figcaption>
+                <div>
+                    <a href="{% url 'classes:delete_message' Classe.id mensagem.id %}">Apagar Mensagem</a>
+                </div>
             </figure>
             {% endfor %}
         {% else %}
@@ -26,5 +28,9 @@
         {% endif %}
     </ul>
 </section>
+<br>
+<div style="text-align: center; margin: 20px 0;">
+    <a href="{% url 'classes:delete' Classe.id %}" style="color:red;"><strong>Apagar Classe</strong></a>
+</div>
 </html>
 {% endblock content %}

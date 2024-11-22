@@ -28,15 +28,11 @@ class MatriculaForm(forms.ModelForm):
 class DeckForm(forms.ModelForm):
     class Meta:
         model = Deck
-        fields = ['usuario', 'classe', 'nome', 'idioma', 'n_cartoes', 'n_dominados', 'n_aprender']
+        fields = ['nome', 'idioma', 'n_cartoes']
         labels = {
-            'usuario': 'Usuário',
-            'classe': 'Classe',
             'nome': 'Nome do Deck',
             'idioma': 'Idioma',
             'n_cartoes': 'Número de Cartões',
-            'n_dominados': 'Cartões Dominados',
-            'n_aprender': 'Cartões a Aprender',
         }
 
 

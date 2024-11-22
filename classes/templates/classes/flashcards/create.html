@@ -1,0 +1,9 @@
+{% extends 'base.html' %} {% block content %}
+<h2>Novo Baralho</h2>
+<form method="POST" action="{% url 'classes:create_flashcards' Classe.id %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Criar</button>
+</form>
+<p><a href="{% url 'classes:flashcards' Classe.id %}">Voltar para a seção de flashcards</a></p>
+{% endblock content %}

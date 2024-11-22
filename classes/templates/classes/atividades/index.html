@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
 <html lang="en">
 <body>
     <nav class="nav-classe">
@@ -18,13 +19,17 @@
                     "{{ arquivo.nome }}"
                 </blockquote>
                 <figcaption>—{{ arquivo.data_upload }}</figcaption>
+                <a href="{% url 'classes:download_pdf' arquivo.id %}" class="btn">Baixar</a> <!-- Link para download -->
             </figure>
             {% endfor %}
         {% else %}
             <p>Ainda não existe nenhuma atividade nesta classe.</p>
         {% endif %}
     </ul>
-    <a href="{% url 'classes:delete' Classe.id %}">Apagar</a>
 </section>
+<br>
+<div style="text-align: center; margin: 20px 0;">
+    <a href="{% url 'classes:delete' Classe.id %}" style="color:red;"><strong>Apagar Classe</strong></a>
+</div>
 </html>
 {% endblock content %}

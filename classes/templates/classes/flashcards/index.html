@@ -6,7 +6,36 @@
             <a href="{% url 'classes:flashcards' Classe.id %}" class="active">Flashcards</a>
             <a href="{% url 'classes:atividades_index' Classe.id %}">Atividades</a>
         </nav>
-
+<hr>
 </body>
+<section>
+  <p>
+    Gostaria de adicionar um baralho?
+    <a href="{% url 'classes:create_flashcards' Classe.id %}">Novo Baralho</a>
+  </p>
+</section>
+<br>
+</section>
+{% if Deck_list %}
+<section class="lista-de-cards">
+  {% for Deck in Deck_list %}
+  <article class="card">
+    <a href="{% url 'classes:flashcards' Classe.id %}"><img src="{{ Classe.poster.url }}" alt="{{ Classe.idioma}}"/></a>
+    <p><strong>{{ Deck.nome }}</strong></p>
+    <p><strong>{{ Deck.n_cartoes }} cards</strong></p>
+    <p>{{ Deck.idioma }}</p>
+    <p>{{ Deck.n_dominados }} dominados</p>
+    <p>{{ Deck.n_aprender }} a dominar</p>
+    </p>
+  </article>
+  {% endfor %}
+</section>
+{% else %}
+<p>Você não tem nenhum baralho.</p>
+{% endif %}
+<br>
+<div style="text-align: center; margin: 20px 0;">
+    <a href="{% url 'classes:delete' Classe.id %}" style="color:red;"><strong>Apagar Classe</strong></a>
+</div>
 </html>
 {% endblock content %}

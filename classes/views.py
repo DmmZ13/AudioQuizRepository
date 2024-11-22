@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -32,6 +32,25 @@ class ClasseDeleteView(DeleteView):
     template_name = 'classes/delete.html'
     success_url = reverse_lazy('classes:index')
 
+class MensagemDeleteView(DeleteView):
+    model = Mensagem
+    template_name = 'classes/mural/delete.html'
+
+    def get_object(self, queryset=None):
+        # Recupera o objeto Mensagem usando o mensagem_id
+        mensagem_id = self.kwargs.get('mensagem_id')
+        return get_object_or_404(Mensagem, pk=mensagem_id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Adiciona o objeto Classe ao contexto
+        context['Classe'] = get_object_or_404(Classe, pk=self.kwargs['pk'])
+        return context
+
+    def get_success_url(self):
+        # Redireciona de volta para o mural da classe
+        return reverse_lazy('classes:mural', kwargs={'pk': self.kwargs['pk']})
+
 class ClasseMuralView(DetailView):
     model = Classe
     template_name = 'classes/mural/index.html'
@@ -60,10 +79,37 @@ class AtividadeCreateView(View):
             return HttpResponseRedirect(reverse_lazy('classes:atividades_index', kwargs={'pk': pk}))
         return render(request, 'classes/atividades/atividade.html', {'form': form, 'Classe': classe})
 
+def download_pdf(request, pk):
+    # Recupera o arquivo pelo ID
+    arquivo = get_object_or_404(Arquivo, pk=pk)
+
+    try:
+        # Retorna o conteúdo binário como resposta para download
+        response = HttpResponse(arquivo.conteudo, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{arquivo.nome}.pdf"'
+        return response
+    except Exception as e:
+        raise Http404("Erro ao processar o arquivo")
+
 class ClasseFlashcardsView(DetailView):
     model = Classe
     template_name = 'classes/flashcards/index.html'
     context_object_name = 'Classe'
+
+class ClasseFlashcardsCreate(CreateView):
+    model = Deck
+    form_class = DeckForm
+    template_name = 'classes/flashcards/create.html'
+
+    def form_valid(self, form):
+        classe = get_object_or_404(Classe, pk=self.kwargs['pk'])  # Obtém a classe pelo pk
+        form.instance.classe = classe  # Associa o baralho à classe
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['Classe'] = get_object_or_404(Classe, pk=self.kwargs['pk'])
+        return context
 
 class ClasseCreateView(CreateView):
     model = Classe

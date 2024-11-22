@@ -21,11 +21,28 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import UsuarioForm
+from django.shortcuts import render, redirect
+from .forms import UsuarioForm
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth.hashers import check_password
+from .models import Usuario
 
-class SignUpView(CreateView):
-    template_name = 'accounts/signup.html'
-    form_class = UsuarioForm
-    success_url = reverse_lazy('classes:index')
+from django.shortcuts import render, redirect
+from .forms import UsuarioForm
+
+def registro_view(request):
+    if request.method == 'POST':
+        form = UsuarioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Redirecione para a página de login
+    else:
+        form = UsuarioForm()
+    return render(request, 'accounts/signup.html', {'form': form})
 
 class ProfileView(TemplateView):
     template_name = 'accounts/profile.html'
