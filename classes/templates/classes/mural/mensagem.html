@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-mensagem">
+    <div class="content">
+        <h2>Mensagem ({{ Classe.idioma }}: Turma {{ Classe.turma }})</h2>
+        <form method="post">
+            {% csrf_token %}
+            <label for="conteudo">Conteúdo:</label>
+            {{ form.conteudo }}
+            
+            <label for="tipo">Tipo:</label>
+            {{ form.tipo }}
+            
+            <button type="submit">Postar Mensagem</button>
+            <p><a href="{% url 'classes:atividades_index' Classe.id %}">Voltar para o mural</a></p>
+        </form>
+    </div>
+</div>
+{% endblock content %}

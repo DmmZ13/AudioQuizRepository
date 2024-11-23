@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Deck: {{ deck.nome }}</h2>
+<a href="{% url 'classes:create_card' deck.id %}">Adicionar Novo Card</a>
+<h3>Cards:</h3>
+<ul>
+    {% for card in cards %}
+        <li>
+            <p><strong>Frente:</strong> {{ card.lado_frente }}</p>
+            <p><strong>Verso:</strong> {{ card.lado_tras }}</p>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'classes:create_card' deck.id %}">
+    <button>Adicionar Novo Card</button>
+</a>
+{% endblock content %}

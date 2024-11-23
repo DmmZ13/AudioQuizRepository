@@ -1,0 +1,1138 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+
+:root {
+  --primary-color: #000000;
+  --secondary-color: #118bee;
+  --tertiary-color: #f44d27;
+  --secondary-color-light: #30b2ff;
+  --tertiary-color-light: #ff6d28;
+  --bg-color: #fff;
+  --secondary-bg-color: #e9e9e9;
+  --color-shadow: #f4f4f4;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  line-height: 1.5em;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+header {
+  width: 100vw; /* Cobre toda a largura */
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  position: relative; /* Contexto para elementos absolutos */
+  background-color: var(--bg-color);
+}
+
+#logo {
+  position: relative;
+  z-index: 1; /* Garante que a logo fique atrás da box */
+  text-align: center; /* Centraliza a logo */
+  margin: 0 auto;
+  max-width: 600px;
+}
+#logo img {
+  max-width: 800px; /* Tamanho grande da logo */
+  width: 100%;
+  height: auto;
+}
+
+#potencialize {
+  position: absolute;
+  top: 85%; /* Ajuste para posicionar logo abaixo da imagem */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Corrige o alinhamento */
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  z-index: 10;
+}
+
+#potencialize p {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+#potencialize .btn {
+  display: inline-block;
+  background-color: #FFBF0D;
+  color: var(--bg-color);
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+}
+
+#potencialize .btn:hover {
+  background-color: #F2F2F2;
+  color: #000;
+}
+
+/* Link "Entrar" no canto superior direito */
+#entrar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+#entrar a {
+  font-size: 1rem;
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#entrar a:hover {
+  color: var(--secondary-color-light);
+}
+
+/* Features Section */
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'Playfair Display', 'serif';
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.feature img {
+  max-width: 150px;
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 2px 2px 10px var(--color-shadow);
+}
+
+.feature-text {
+  flex: 1;
+}
+
+.feature-text h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.feature-text p {
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+.feature-text ul {
+  list-style-type: disc; /* Ou outro estilo desejado */
+  padding-left: 20px;
+  margin: 0;
+}
+
+.feature-text ul li {
+  font-size: 1rem;
+  color: #000;
+}
+
+  header#cabecalho-principal {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1080px;
+    padding: 3rem 1rem;
+  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  li a {
+    color: var(--secondary-color);
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  li a:hover {
+    color: var(--secondary-color-light);
+    text-decoration: underline;
+  }
+  
+  body, #root {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  nav#navegacao-principal li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  main#conteiner-principal {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1080px;
+    padding: 1rem 1rem;
+    flex-grow: 1;
+  }
+  
+  footer#rodape-principal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 1rem;
+  }
+  
+  .lista-de-cards {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    border: 1px solid var(--secondary-bg-color);
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px var(--color-shadow);
+    margin: 1rem;
+    padding: 1.25rem;
+    width: 285px;
+  }
+  
+  .small-card {
+    border: 1px solid var(--secondary-bg-color);
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px var(--color-shadow);
+    margin: 1rem;
+    padding: 1.25rem;
+    width: 160px;
+  }
+  
+  .card img {
+    width: 100%;
+  }
+  
+  .small-card img {
+    width: 100%;
+  }
+  
+  a {
+    color: var(--secondary-color);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: var(--secondary-color-light);
+    text-decoration: underline;
+  }
+  
+  .dados-de-filme {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    padding: 1rem 0;
+  }
+  
+  .dados-de-filme img {
+    width: 285px;
+    box-shadow: 2px 2px 10px var(--color-shadow);
+  }
+  
+  .dados-de-filme ul {
+    list-style-type: none;
+  }
+  
+  input {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    border: 1px solid var(--secondary-bg-color);
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  button {
+    background-color: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
+    color: var(--bg-color);
+    border-radius: 5px;
+    display: inline-block;
+    font-size: medium;
+    font-weight: bold;
+    margin: 0.5rem 0;
+    padding: 1rem 2rem;
+  }
+  
+  button:hover {
+    background-color: var(--secondary-color-light);
+    border: 2px solid var(--secondary-color-light);
+  }
+  
+
+.login-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  border: 1px solid var(--secondary-bg-color);
+  border-radius: 10px;
+  background-color: var(--bg-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-form-container {
+    position: absolute;
+    top: 120%; /* Ajuste a posição vertical da box */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translate(-50%, -50%); /* Garante que o centro do contêiner seja o ponto de referência */
+    z-index: 2; /* Garante que a box fique na frente da logo */
+    background-color: white; /* Fundo para a box */
+    padding: 20px; /* Espaçamento interno */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+    width: 300px; /* Tamanho da box */
+}
+.login-form input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--secondary-bg-color);
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: var(--secondary-color);
+  color: var(--bg-color);
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-form button:hover {
+  background-color: var(--secondary-color-light);
+}
+
+.login-form p {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.login-form p a {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-form p a:hover {
+  color: var(--secondary-color-light);
+  text-decoration: underline;
+}
+
+.signup-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  border: 1px solid var(--secondary-bg-color);
+  border-radius: 10px;
+  background-color: var(--bg-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.signup-form-container {
+    position: absolute;
+    top: 150%; /* Ajuste a posição vertical da box */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translate(-50%, -50%); /* Garante que o centro do contêiner seja o ponto de referência */
+    z-index: 2; /* Garante que a box fique na frente da logo */
+    background-color: white; /* Fundo para a box */
+    padding: 20px; /* Espaçamento interno */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+    width: 300px; /* Tamanho da box */
+}
+.signup-form input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--secondary-bg-color);
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.signup-form button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: var(--secondary-color);
+  color: var(--bg-color);
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.signup-form button:hover {
+  background-color: var(--secondary-color-light);
+}
+
+.signup-form p {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.signup-form p a {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-form p a:hover {
+  color: var(--secondary-color-light);
+  text-decoration: underline;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  color: white;
+  background-color: #007BFF;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.nav-classe {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-classe a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+.nav-classe a.active {
+  background-color: #FFBF0D;
+  color: #000;
+}
+.nav-classe a:hover {
+  background-color: #f0f0f0;
+}
+/* Escopo para a página de perfil */
+.profile-page {
+  max-width: 900px; /* Largura máxima */
+  margin: 40px auto; /* Centralizado */
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Corrige borda cortada */
+}
+
+/* Header */
+.profile-page .profile-header {
+  text-align: center; /* Centraliza horizontalmente o conteúdo */
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column; /* Organiza os elementos verticalmente */
+  justify-content: center; /* Centraliza verticalmente */
+  align-items: center; /* Centraliza horizontalmente */
+  width: 100%; /* Garante que o cabeçalho ocupe toda a largura */
+  height: 200px; /* Define uma altura para o cabeçalho */
+  position: relative; /* Cria contexto para posicionamento */
+}
+.profile-page .profile-header img {
+  width: 120px; /* Define a largura da imagem */
+  height: 120px; /* Define a altura da imagem */
+  border-radius: 50%; /* Torna a imagem redonda */
+  background-color: #eaeaea;
+  display: block; /* Garante que a imagem seja tratada como bloco */
+  margin: 0 auto; /* Centraliza a imagem horizontalmente */
+  object-fit: cover; /* Garante que a imagem não deforme */
+}
+
+.profile-page .profile-header h1 {
+  font-size: 24px;
+  color: #333333;
+  margin: 0;
+}
+
+/* Layout principal */
+.profile-page .content {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Seção de informações pessoais */
+.profile-page .personal-info {
+  width: 30%;
+  background: #f7f7f7;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.profile-page .personal-info h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #444;
+  text-align: center;
+}
+
+.profile-page .personal-info form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.profile-page .personal-info label {
+  font-weight: bold;
+  color: #666;
+}
+
+.profile-page .personal-info input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.profile-page .btn-primary {
+  background-color: #333333;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.profile-page .btn-primary:hover {
+  background-color: #555555;
+}
+
+/* Estatísticas */
+.profile-page .stats {
+  width: 65%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.profile-page .stat-item {
+  flex: 1 1 calc(48%);
+  background: #fafafa;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+}
+
+.profile-page .stat-item h3 {
+  font-size: 18px;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.profile-page .stat-item p {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0;
+}
+
+/* Botão de logout */
+.profile-page .logout-btn {
+  display: block;
+  background-color: #ffd700;
+  color: #333;
+  text-align: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  margin: 30px auto 0;
+  width: 200px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.profile-page .logout-btn:hover {
+  background-color: #e6c200;
+}
+
+/* Espaçamento nos dados pessoais */
+.profile-page .personal-info p {
+  font-size: 16px;
+  color: #444;
+  margin: 15px 0; /* Aumentando o espaçamento vertical */
+  line-height: 1.5; /* Melhorando a legibilidade */
+}
+
+.profile-page .personal-info h2 {
+  margin-bottom: 20px; /* Espaçamento entre o título e os dados */
+}
+
+/* Estilo para a página de mensagem */
+.page-mensagem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: white; /* Fundo branco para toda a página */
+  margin: 0;
+  padding: 0;
+}
+
+/* Conteúdo principal */
+.page-mensagem .content {
+  background-color: #f3f3f3; /* Caixa com fundo claro */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+/* Título */
+.page-mensagem h2 {
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  color: #333;
+}
+
+/* Formulário */
+.page-mensagem form label {
+  display: block;
+  text-align: left;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.page-mensagem form textarea,
+.page-mensagem form select,
+.page-mensagem form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fff; /* Fundo branco para os inputs */
+  color: #333;
+}
+
+.page-mensagem form textarea:focus,
+.page-mensagem form select:focus,
+.page-mensagem form input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.page-mensagem form button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.page-mensagem form button:hover {
+  background-color: #0056b3;
+}
+
+.page-mensagem {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Alinha o conteúdo ao topo */
+  min-height: 100vh;
+  background-color: white; /* Fundo branco para toda a página */
+  margin: 0;
+  padding: 20px; /* Adiciona espaçamento ao redor */
+}
+
+/* Conteúdo principal */
+.page-mensagem .content {
+  background-color: #f3f3f3; /* Caixa com fundo claro */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  margin-top: 20px; /* Adiciona espaçamento superior */
+}
+
+/* Estilo para a página do mural */
+.mural-page {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #fff;
+}
+
+/* Navegação */
+.mural-page .nav-classe {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.mural-page .nav-classe a {
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: #333;
+  background-color: #f5f5f5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.mural-page .nav-classe a.active {
+  background-color: #ffc107;
+  color: white;
+  font-weight: bold;
+}
+
+.mural-page .nav-classe a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Estilo das mensagens */
+.mural-page .message {
+  display: flex;
+  align-items: flex-start;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.mural-page .message img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.mural-page .message-content {
+  flex-grow: 1;
+}
+
+.mural-page .message-content h4 {
+  font-size: 1em;
+  margin: 0 0 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.mural-page .message-content p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.mural-page .message-content .message-divider {
+  margin: 10px 0;
+  border-top: 2px solid #ffc107;
+}
+
+/* Botão para apagar mensagem */
+.mural-page .message-action {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.mural-page .message-action a {
+  color: #dc3545;
+  text-decoration: none;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.mural-page .message-action a:hover {
+  text-decoration: underline;
+}
+
+/* Escopo para a página de atividades */
+.atividades-page {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #fff;
+}
+
+/* Navegação */
+.atividades-page .nav-classe {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.atividades-page .nav-classe a {
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: #333;
+  background-color: #f5f5f5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.atividades-page .nav-classe a.active {
+  background-color: #ffc107;
+  color: white;
+  font-weight: bold;
+}
+
+.atividades-page .nav-classe a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Botão de criar atividade */
+.atividades-page button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.atividades-page button:hover {
+  background-color: #0056b3;
+}
+
+/* Estilo das atividades */
+.atividades-page figure {
+  display: flex;
+  align-items: center;
+  background-color: #fff9e6; /* Amarelo claro */
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ffe4a1; /* Contorno sutil */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.atividades-page figure img {
+  width: 50px;
+  height: 50px;
+  margin-right: 15px;
+}
+
+.atividades-page figure blockquote {
+  font-size: 1em;
+  margin: 0;
+  color: #333;
+  flex-grow: 1;
+}
+
+.atividades-page figure figcaption {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.atividades-page figure a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  margin-left: 15px;
+}
+
+.atividades-page figure a:hover {
+  text-decoration: underline;
+}
+
+/* Botão de apagar atividade */
+.atividades-page .delete-activity {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.atividades-page .delete-activity a {
+  color: red;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1em;
+}
+
+.atividades-page .delete-activity a:hover {
+  text-decoration: underline;
+}
+/* Botão de baixar */
+.atividades-page figure a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 10px 15px;
+  background-color: #007bff; /* Azul do botão */
+  color: white; /* Cor do texto */
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.atividades-page figure a.btn:hover {
+  background-color: #0056b3; /* Azul mais escuro no hover */
+  text-decoration: none; /* Sem sublinhado no hover */
+}
+
+/* Ícone no botão */
+.atividades-page figure a.btn img {
+  margin-right: 8px; /* Espaço entre ícone e texto */
+}
+
+
+/* Escopo para a página de atividades */
+.page-atividade {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: white; /* Fundo branco para a página */
+  margin: 0;
+  padding: 0;
+}
+
+/* Conteúdo principal */
+.page-atividade .content {
+  background-color: #f3f3f3; /* Fundo claro */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+/* Título */
+.page-atividade h2 {
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  color: #333;
+}
+
+/* Formulário */
+.page-atividade form label {
+  display: block;
+  text-align: left;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.page-atividade form textarea,
+.page-atividade form select,
+.page-atividade form input[type="text"],
+.page-atividade form input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+}
+
+.page-atividade form input[type="file"] {
+  padding: 5px; /* Ajuste para input de arquivos */
+}
+
+.page-atividade form textarea:focus,
+.page-atividade form select:focus,
+.page-atividade form input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.page-atividade form button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.page-atividade form button:hover {
+  background-color: #0056b3;
+}
+
+/* Link de retorno */
+.page-atividade p a {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.page-atividade p a:hover {
+  text-decoration: underline;
+}
+
+/* Escopo para a página de atividades */
+.page-atividade {
+  display: block; /* Alinhamento natural para evitar deslocamento desnecessário */
+  margin: 20px auto; /* Centraliza horizontalmente e adiciona margem no topo */
+  padding: 20px; /* Adiciona espaçamento interno */
+  background-color: white; /* Fundo branco para a página */
+}
+
+/* Conteúdo principal */
+.page-atividade .content {
+  background-color: #f3f3f3; /* Fundo claro */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto; /* Centraliza o conteúdo horizontalmente */
+}
+
+
+.flashcards-page {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #fff;
+}
+
+/* Navegação */
+.flashcards-page .nav-classe {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.flashcards-page .nav-classe a {
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: #333;
+  background-color: #f5f5f5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.flashcards-page .nav-classe a.active {
+  background-color: #ffc107;
+  color: white;
+  font-weight: bold;
+}
+
+.flashcards-page .nav-classe a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Estilo das mensagens */
+.flashcards-page .message {
+  display: flex;
+  align-items: flex-start;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.flashcards-page .message img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.flashcards-page .message-content {
+  flex-grow: 1;
+}
+
+.flashcards-page .message-content h4 {
+  font-size: 1em;
+  margin: 0 0 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.flashcards-page .message-content p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.flashcards-page .message-content .message-divider {
+  margin: 10px 0;
+  border-top: 2px solid #ffc107;
+}
+
+/* Botão para apagar mensagem */
+.flashcards-page .message-action {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.flashcards-page .message-action a {
+  color: #dc3545;
+  text-decoration: none;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.flashcards-page .message-action a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="{% url 'classes:delete_message' Classe.id mensagem.id %}" method="post">
+    {% csrf_token %}
+    <p>
+      Você tem certeza que deseja apagar a mensagem "{{ mensagem.conteudo }}"?
+    </p>
+    <button type="submit">Apagar</button>
+  </form>
+{% endblock content %}

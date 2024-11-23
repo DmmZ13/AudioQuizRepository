@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Deletar Baralho</h2>
+<form method="post">
+    {% csrf_token %}
+    <p>Você tem certeza que deseja excluir o baralho "{{ deck.nome }} ({{ deck.classe.idioma }})"?</p>
+    <button type="submit">Excluir</button>
+</form>
+{% endblock content %}
