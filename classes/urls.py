@@ -12,6 +12,7 @@ urlpatterns = [
     path('<int:pk>/create_flashcards', views.ClasseFlashcardsCreate.as_view(), name='create_flashcards'),
     path('create/', views.ClasseCreateView.as_view(), name='create'),
     path('<int:pk>/mensagem/', views.MensagemCreateView.as_view(), name='mensagem'),
+    path('<int:pk>/mensagem/responder/<int:resposta_id>/', views.MensagemCreateView.as_view(), name='responder_mensagem'),
     path('<int:pk>/mensagem/delete/<int:mensagem_id>/', views.MensagemDeleteView.as_view(), name='delete_message'),
     path('delete/<int:pk>/', views.ClasseDeleteView.as_view(), name='delete'),
     path('update/<int:pk>/', views.ClasseUpdateView.as_view(), name='update'),

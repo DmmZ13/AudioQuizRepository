@@ -80,10 +80,11 @@ class MensagemDeleteView(DeleteView):
         # Redireciona de volta para o mural da classe
         return reverse_lazy('classes:mural', kwargs={'pk': self.kwargs['pk']})
 
-class ClasseMuralView(DetailView):
-    model = Classe
-    template_name = 'classes/mural/index.html'
-    context_object_name = 'Classe'
+class ClasseMuralView(View):
+    def get(self, request, pk):
+        classe = get_object_or_404(Classe, pk=pk)
+        mensagens = classe.mensagens.filter(resposta_para__isnull=True)  # Apenas mensagens principais
+        return render(request, 'classes/mural/index.html', {'Classe': classe, 'mensagens': mensagens})
 
 class ClasseAtividadesView(DetailView):
     model = Classe
@@ -203,25 +204,27 @@ class ClasseCreateView(CreateView):
             )
 
 class MensagemCreateView(View):
-    def get(self, request, pk):
-        # Obter a classe pelo PK
+    def get(self, request, pk, resposta_id=None):
         classe = get_object_or_404(Classe, pk=pk)
+        resposta_para = None
+        if resposta_id:
+            resposta_para = get_object_or_404(Mensagem, pk=resposta_id)
         form = MensagemForm()
-        return render(request, 'classes/mural/mensagem.html', {'form': form, 'Classe': classe})
+        return render(request, 'classes/mural/mensagem.html', {'form': form, 'Classe': classe, 'resposta_para': resposta_para})
 
-    def post(self, request, pk):
-        # Obter a classe pelo PK
+    def post(self, request, pk, resposta_id=None):
         classe = get_object_or_404(Classe, pk=pk)
+        resposta_para = None
+        if resposta_id:
+            resposta_para = get_object_or_404(Mensagem, pk=resposta_id)
         form = MensagemForm(request.POST)
         if form.is_valid():
-            # Salvar a mensagem associando à classe e ao usuário logado
             mensagem = form.save(commit=False)
             mensagem.classe = classe
-            mensagem.usuario = request.user  # Atribuir o usuário autenticado
+            mensagem.usuario = request.user
+            mensagem.resposta_para = resposta_para
             mensagem.save()
-            # Redirecionar para o mural após a criação
             return HttpResponseRedirect(reverse_lazy('classes:mural', kwargs={'pk': pk}))
-        # Reexibir o formulário com erros, se inválido
         return render(request, 'classes/mural/mensagem.html', {'form': form, 'Classe': classe})
 
 def aceitar_convite(request, notificacao_id):

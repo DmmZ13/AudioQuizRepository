@@ -1,0 +1,20 @@
+{% for resposta_att in respostas %}
+<li class="response">
+    <h5>{{ resposta_att.usuario.username }} respondeu a {{resposta.conteudo}}:</h5>
+    <p>{{ resposta_att.conteudo }}</p>
+    <small>Enviado em {{ resposta_att.data_envio|date:"d/m/Y H:i" }}</small>
+
+    <!-- Ações de resposta -->
+    <div class="message-action">
+        <!-- Botão para responder -->
+        <a href="{% url 'classes:responder_mensagem' Classe.id resposta_att.id %}" class="btn btn-primary">Responder</a>
+        <!-- Botão para apagar, se for o autor -->
+        {% if user.username == resposta_att.usuario.username %}
+            <a href="{% url 'classes:delete_message' Classe.id resposta_att.id %}" class="btn btn-danger">Apagar</a>
+        {% endif %}
+    </div>
+
+    <!-- Chamada recursiva para respostas de respostas -->
+    {% include 'classes/mural/respostas.html' with respostas=resposta_att.respostas.all %}
+</li>
+{% endfor %}

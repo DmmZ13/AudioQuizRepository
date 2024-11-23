@@ -67,7 +67,7 @@ class CardForm(forms.ModelForm):
 class MensagemForm(forms.ModelForm):
     class Meta:
         model = Mensagem
-        fields = ['conteudo', 'tipo']  # Removido 'usuario'
+        fields = ['conteudo', 'tipo', 'resposta_para']  # Removido 'usuario'
         labels = {
             'conteudo': 'Conteúdo',
             'tipo': 'Tipo',
@@ -75,6 +75,7 @@ class MensagemForm(forms.ModelForm):
         widgets = {
             'conteudo': forms.Textarea(attrs={'rows': 4, 'cols': 50}),
             'tipo': forms.Select(choices=Mensagem.TIPOS),
+            'resposta_para': forms.HiddenInput(),  # Oculto no formulário padrão
         }
 
 class ArquivoForm(forms.ModelForm):

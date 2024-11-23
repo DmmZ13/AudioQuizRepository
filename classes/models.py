@@ -57,7 +57,6 @@ class Card(models.Model):
     def __str__(self):
         return self.lado_frente
 
-
 class Mensagem(models.Model):
     TIPOS = (
         ('TEXTO', 'Texto'),
@@ -65,14 +64,21 @@ class Mensagem(models.Model):
         ('VIDEO', 'Vídeo'),
     )
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    classe = models.ForeignKey(Classe, on_delete=models.CASCADE)
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, related_name='mensagens' )
     conteudo = models.TextField(max_length=1000)
     data_envio = models.DateTimeField(auto_now_add=True)
     tipo = models.CharField(max_length=10, choices=TIPOS)
+    resposta_para = models.ForeignKey(
+        'self',  # Faz referência ao próprio modelo
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name='respostas'  # Permite acessar as respostas de uma mensagem
+    )
 
     def __str__(self):
         return f"Mensagem de {self.usuario}"
-
+    
 class Arquivo(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE)
