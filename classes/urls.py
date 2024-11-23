@@ -17,4 +17,5 @@ urlpatterns = [
     path('<int:pk>/mensagem/delete/<int:mensagem_id>/', views.MensagemDeleteView.as_view(), name='delete_message'),
     path('delete/<int:pk>/', views.ClasseDeleteView.as_view(), name='delete'),
     path('download/<int:pk>/', views.download_pdf, name='download_pdf'),
+    path('aceitar_convite/<int:notificacao_id>/', views.aceitar_convite, name='aceitar_convite'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

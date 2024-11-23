@@ -1,23 +1,34 @@
 from django.db import models
 from accounts.models import Usuario
+from django.utils.timezone import now
 
 class Classe(models.Model):
     turma = models.CharField(max_length=255)
     idioma = models.CharField(max_length=255)
     poster = models.ImageField(upload_to='classes/', blank=True, null=True)
+    usuarios = models.ManyToManyField(Usuario)
 
     def __str__(self):
         return self.turma
+    
+    @property
+    def poster_url(self):
+        """Retorna a URL do poster ou uma imagem padrão."""
+        if self.poster:
+            return self.poster.url
+        return '/static/images/Japan.svg'  # Substitua pelo caminho correto para sua imagem padrão
 
-
-class Matricula(models.Model):
+class Notificacao(models.Model):
+    titulo = models.CharField(max_length=255)
+    mensagem = models.TextField()
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    classe = models.ForeignKey(Classe, on_delete=models.CASCADE)
+    data_criacao = models.DateTimeField(default=now)
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True, blank=True)  # Relaciona à classe, se aplicável
+    lida = models.BooleanField(default=False)  # Para marcar se o usuário já viu a notificação
 
     def __str__(self):
-        return f"{self.usuario} - {self.classe}"
-
-
+        return f"Notificação para {self.usuario.username}: {self.titulo}"
+    
 class Deck(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE)

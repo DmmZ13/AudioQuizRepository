@@ -2,19 +2,21 @@
 {% load static %}
 
 {% block content %}
+
+{% if user.is_authenticated %}
 <div class="container profile-page">
     <header class="profile-header">
         <img src="{% static 'perfil.svg' %}" alt="Profile Picture" class="profile-picture"><br>
-        <h1>Bem-vindo, {{ usuario.nome }} {{ usuario.sobrenome }}</h1>
+        <h1>Bem-vindo, {{user.username}}</h1>
     </header>
 
     <div class="content">
         <section class="personal-info">
             <h2>Dados Pessoais</h2>
             <div>
-                <p><strong>Nome:</strong> {{ usuario.nome }}</p>
-                <p><strong>Sobrenome:</strong> {{ usuario.sobrenome }}</p>
-                <p><strong>Email:</strong> {{ usuario.email }}</p>
+                <p><strong>Nome:</strong>  {{user.username}}</p>
+                <p><strong>Senha:</strong>  ************</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
             </div>
             <button type="submit" class="btn btn-primary">Alterar</button>
         </section>
@@ -43,6 +45,8 @@
         </section>
     </div>
 
-    <button class="btn btn-secondary logout-btn">Logout</button>
+    <a href="{% url 'logout' %}" class="btn btn-secondary logout-btn">Logout</a>
 </div>
-{% endblock %}
+{% else %}
+    <p>Você não está logado. <a href="{% url 'accounts:login' %}">Faça login aqui</a>.</p>
+{% endif %}{% endblock content %}

@@ -1,23 +1,61 @@
-{% extends 'base.html' %} {% block content %}
-<h2>Classes</h2>
-<section>
-  <p>
-    Gostaria de incluir outra classe?
-    <a href="{% url 'classes:create' %}">Nova Classe</a>
-  </p>
-</section>
-{% if Classe_list %}
-<section class="lista-de-cards">
-  {% for Classe in Classe_list %}
-  <article class="card">
-    <a href="{% url 'classes:mural' Classe.id %}"><img src="{{ Classe.poster.url }}" alt="Poster do {{ Classe.idioma}}"/></a>
-    <p><strong>{{ Classe.idioma }}</strong></p>
-    <p>Turma {{ Classe.turma }}</p>
-    <p>Professor {{ Classe.professor }}</p>
-    </p>
-  </article>
-  {% endfor %}
-</section>
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+  <h2>Seja bem-vindo, {{ user.username }}</h2>
+  <br>
+  <h2>Classes</h2>
+
+  <!-- Notificações para o aluno -->
+  {% if user.tipo == 0 and user.notificacao_set.all %}
+    <section>
+      <h3>Notificações</h3>
+      <ul>
+      {% for notificacao in user.notificacao_set.all %}
+      <div>
+        {% if not notificacao.lida %}
+          <h4>{{ notificacao.titulo }}</h4>
+          <p>{{ notificacao.mensagem }}</p>
+              <a href="{% url 'classes:aceitar_convite' notificacao.id %}" class="btn btn-primary">
+                  Aceitar Convite
+              </a>
+        {% endif %}
+      </div>
+      {% endfor %}
+      {% else %}
+        <p>Você não tem notificações.</p>
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if user.tipo == 1 %}
+    <section>
+      <p>
+        Gostaria de incluir outra classe?
+        <a href="{% url 'classes:create' %}">Nova Classe</a>
+      </p>
+    </section>
+  {% endif %}
+
+  {% if user.classe_set.all %}
+    <section class="lista-de-cards">
+      {% for Classe in user.classe_set.all %}
+        <article class="card">
+          <a href="{% url 'classes:mural' Classe.id %}">
+            <img src="{{ Classe.poster_url }}" alt="Poster do {{ Classe.idioma }}" />
+          </a>
+          <p><strong>{{ Classe.idioma }}</strong></p>
+          <p>Turma {{ Classe.turma }}</p>
+          <p>Professor {{ Classe.professor }}</p>
+        </article>
+      {% endfor %}
+    </section>
+  {% else %}
+    <p>Você não está matriculado em nenhuma classe.</p>
+  {% endif %} 
+
 {% else %}
-<p>Você não está matriculado em nenhuma classe.</p>
-{% endif %} {% endblock content %}
+  <p>Você não está logado. <a href="{% url 'accounts:login' %}">Faça login aqui</a>.</p>
+{% endif %}
+{% endblock content %}

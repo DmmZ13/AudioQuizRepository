@@ -19,13 +19,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import  Classe, Matricula, Deck, Card, Mensagem, Arquivo
-from .forms import ClasseForm, ArquivoForm, MatriculaForm, DeckForm, CardForm, MensagemForm
+from .models import  Notificacao, Classe, Deck, Card, Mensagem, Arquivo
+from .forms import ClasseForm, ArquivoForm, DeckForm, CardForm, MensagemForm
 
 class ClasseListView(ListView):
     model = Classe
     template_name = 'classes/index.html'
-    context_object_name = 'Classe_list'
 
 class ClasseDeleteView(DeleteView):
     model = Classe
@@ -117,6 +116,28 @@ class ClasseCreateView(CreateView):
     template_name = 'classes/create.html'
     success_url = reverse_lazy('classes:index')
 
+    def form_valid(self, form):
+        # Salva a classe sem commit
+        classe = form.save(commit=False)
+        # Salva a instância da classe
+        classe.save()
+        # Salva a relação N pra N dos usuários selecionados
+        form.save_m2m()
+        # Adiciona o usuário logado à relação N pra N como criador/professor
+        classe.usuarios.add(self.request.user)
+        # Envia notificações para os alunos selecionados
+        self.enviar_notificacao_para_alunos(form.cleaned_data['alunos'], classe)
+        return super().form_valid(form)
+
+    def enviar_notificacao_para_alunos(self, alunos, classe):
+        """Envia notificações para os alunos convidados"""
+        for aluno in alunos:
+            Notificacao.objects.create(
+                titulo="Convite para a classe",
+                mensagem=f"Você foi convidado para a classe '{classe.turma}' de {classe.idioma}.",
+                classe = classe,
+                usuario = aluno
+            )
 
 class MensagemCreateView(View):
     def get(self, request, pk):
@@ -130,12 +151,32 @@ class MensagemCreateView(View):
         classe = get_object_or_404(Classe, pk=pk)
         form = MensagemForm(request.POST)
         if form.is_valid():
-            # Salvar a mensagem associando à classe
+            # Salvar a mensagem associando à classe e ao usuário logado
             mensagem = form.save(commit=False)
             mensagem.classe = classe
+            mensagem.usuario = request.user  # Atribuir o usuário autenticado
             mensagem.save()
             # Redirecionar para o mural após a criação
             return HttpResponseRedirect(reverse_lazy('classes:mural', kwargs={'pk': pk}))
         # Reexibir o formulário com erros, se inválido
         return render(request, 'classes/mural/mensagem.html', {'form': form, 'Classe': classe})
 
+def aceitar_convite(request, notificacao_id):
+    # Verifica se o usuário está autenticado
+    if not request.user.is_authenticated:
+        messages.error(request, "Você precisa estar logado para aceitar o convite.")
+        return redirect('accounts:login')
+
+    # Obtém a classe e a notificação
+    notificacao = get_object_or_404(Notificacao, id=notificacao_id, usuario=request.user)
+    classe = get_object_or_404(Classe, id=notificacao.classe_id)
+
+    # Adiciona o usuário à classe
+    classe.usuarios.add(request.user)
+
+    # Marca a notificação como lida
+    notificacao.lida = True
+    notificacao.save()
+
+    messages.success(request, f"Você agora faz parte da classe '{classe.turma}'.")
+    return redirect('classes:index')  # Redireciona para a página inicial ou lista de classes

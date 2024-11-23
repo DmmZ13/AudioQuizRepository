@@ -9,4 +9,6 @@
     {{ form.as_p }}
     <button type="submit">Entrar</button>
 </form>
+<a href="{% url 'accounts:signup' %}" class="btn">Ainda não tem cadastro?</a> 
+<a href="{% url 'accounts:signup' %}" class="btn">Esqueceu sua senha?</a>
 {% endblock %}
