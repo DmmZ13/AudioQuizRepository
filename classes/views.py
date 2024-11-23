@@ -21,6 +21,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import  Notificacao, Classe, Deck, Card, Mensagem, Arquivo
 from .forms import ClasseForm, ArquivoForm, DeckForm, CardForm, MensagemForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 class ClasseListView(ListView):
     model = Classe
@@ -30,6 +31,35 @@ class ClasseDeleteView(DeleteView):
     model = Classe
     template_name = 'classes/delete.html'
     success_url = reverse_lazy('classes:index')
+
+class ClasseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Classe
+    form_class = ClasseForm
+    template_name = 'classes/update.html'
+    success_url = reverse_lazy('classes:index')
+
+    def form_valid(self, form):
+        classe = form.save(commit=False)
+        classe.save()
+        form.save_m2m()  # Salvar alunos selecionados
+        # Verifica novos alunos para evitar notificações duplicadas
+        novos_alunos = form.cleaned_data['alunos'].exclude(id__in=classe.usuarios.all())
+        classe.usuarios.add(self.request.user)  # Adiciona o professor à classe
+        self.enviar_notificacao_para_alunos(novos_alunos, classe)
+        return super().form_valid(form)
+
+    def enviar_notificacao_para_alunos(self, novos_alunos, classe):
+        """Envia notificações apenas para novos alunos convidados"""
+        for aluno in novos_alunos:
+            Notificacao.objects.create(
+                titulo="Convite para a classe",
+                mensagem=f"Você foi convidado para a classe '{classe.turma}' de {classe.idioma}.",
+                classe=classe,
+                usuario=aluno
+            )
+    def test_func(self):
+        # Permitir acesso apenas para professores
+        return self.request.user.is_authenticated and self.request.user.tipo == 1
 
 class MensagemDeleteView(DeleteView):
     model = Mensagem
@@ -72,11 +102,44 @@ class AtividadeCreateView(View):
         if form.is_valid():
             arquivo = form.save(commit=False)
             arquivo.classe = classe
+            arquivo.usuario = request.user  # Associa o usuário autenticado
             arquivo.tipo = request.FILES['conteudo'].content_type
             arquivo.conteudo = request.FILES['conteudo'].read()
             arquivo.save()
             return HttpResponseRedirect(reverse_lazy('classes:atividades_index', kwargs={'pk': pk}))
         return render(request, 'classes/atividades/atividade.html', {'form': form, 'Classe': classe})
+
+class AtividadeDeleteView(DeleteView):
+    model = Arquivo  # Corrige para deletar o modelo Arquivo (atividade)
+    template_name = 'classes/atividades/delete.html'
+    
+    def get_success_url(self):
+        # Retorna para a lista de atividades da classe após a exclusão
+        return reverse_lazy('classes:atividades_index', kwargs={'pk': self.object.classe.id})
+
+class AtividadeUpdateView(View):
+    def get(self, request, pk):
+        # Recupera a atividade pelo ID
+        atividade = get_object_or_404(Arquivo, pk=pk)
+        form = ArquivoForm(instance=atividade)  # Preenche o formulário com os dados da atividade existente
+        return render(request, 'classes/atividades/update.html', {'form': form, 'atividade': atividade})
+
+    def post(self, request, pk):
+        # Recupera a atividade pelo ID
+        atividade = get_object_or_404(Arquivo, pk=pk)
+        form = ArquivoForm(request.POST, request.FILES, instance=atividade)  # Associa o formulário à atividade
+        if form.is_valid():
+            arquivo = form.save(commit=False)
+            
+            # Verifica se um novo arquivo foi enviado
+            if 'conteudo' in request.FILES:
+                arquivo.tipo = request.FILES['conteudo'].content_type
+                arquivo.conteudo = request.FILES['conteudo'].read()
+
+            arquivo.save()  # Salva as alterações na atividade
+            return HttpResponseRedirect(reverse_lazy('classes:atividades_index', kwargs={'pk': atividade.classe.pk}))
+
+        return render(request, 'classes/atividades/update.html', {'form': form, 'atividade': atividade})
 
 def download_pdf(request, pk):
     # Recupera o arquivo pelo ID
@@ -180,3 +243,20 @@ def aceitar_convite(request, notificacao_id):
 
     messages.success(request, f"Você agora faz parte da classe '{classe.turma}'.")
     return redirect('classes:index')  # Redireciona para a página inicial ou lista de classes
+
+@login_required
+def recusar_convite(request, notificacao_id):
+    """
+    View para recusar o convite de uma classe.
+    """
+    # Obtém a notificação
+    notificacao = get_object_or_404(Notificacao, id=notificacao_id, usuario=request.user)
+
+    # Exclui a notificação, já que o convite foi recusado
+    notificacao.delete()
+
+    # Adiciona uma mensagem de sucesso
+    messages.success(request, "Você recusou o convite para a classe.")
+
+    # Redireciona o usuário para uma página apropriada (ex: página inicial ou painel de notificações)
+    return redirect('classes:index')  # Substitua pelo nome correto da URL

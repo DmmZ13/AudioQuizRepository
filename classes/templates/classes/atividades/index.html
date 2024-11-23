@@ -28,7 +28,12 @@
                         <a href="{% url 'classes:download_pdf' arquivo.id %}" class="btn">
                             Baixar Arquivo
                         </a>
-                        
+                        {% if user.tipo == 1 %}
+                            <div class="delete-activity">
+                                <a href="{% url 'classes:atividades_delete' arquivo.id %}">Apagar Arquivo</a>
+                                <a href="{% url 'classes:atividades_update' arquivo.id %}">Alterar Arquivo</a>
+                            </div>
+                        {% endif %}
                     </figure>
                     {% endfor %}
                 {% else %}
@@ -36,10 +41,6 @@
                 {% endif %}
             </ul>
         </section>
-
-        <div class="delete-activity">
-            <a href="{% url 'classes:delete' Classe.id %}">Apagar Atividade</a>
-        </div>
     {% else %}
         <p>Você não está logado. <a href="{% url 'accounts:login' %}">Faça login aqui</a>.</p>
     {% endif %}

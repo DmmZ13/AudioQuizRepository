@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Deletar Atividade</h2>
+
+<p>Tem certeza de que deseja deletar a atividade <strong>{{ object.nome }}</strong>?</p>
+
+<form method="POST" action="">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sim, deletar</button>
+    <a href="{% url 'classes:atividades_index' object.classe.id %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock content %}

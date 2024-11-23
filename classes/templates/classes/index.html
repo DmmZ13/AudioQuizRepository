@@ -20,6 +20,9 @@
               <a href="{% url 'classes:aceitar_convite' notificacao.id %}" class="btn btn-primary">
                   Aceitar Convite
               </a>
+              <a href="{% url 'classes:recusar_convite' notificacao.id %}" class="btn btn-primary">
+                Recusar Convite
+            </a>
         {% endif %}
       </div>
       {% endfor %}
@@ -47,7 +50,17 @@
           </a>
           <p><strong>{{ Classe.idioma }}</strong></p>
           <p>Turma {{ Classe.turma }}</p>
-          <p>Professor {{ Classe.professor }}</p>
+          {% for Usuario in Classe.usuarios.all %} 
+            {% if Usuario.tipo == 1 %}
+              <p>Professor  {{ Usuario.first_name }} {{ Usuario.last_name }}</p>
+            {% endif %} 
+          {% endfor %}
+          {% if user.tipo == 1 %}
+            <div class="delete-class">
+              <a href="{% url 'classes:delete' Classe.id %}">Apagar Classe</a>
+              <a href="{% url 'classes:update' Classe.id %}">Alterar Classe</a>
+            </div>
+          {% endif %}
         </article>
       {% endfor %}
     </section>
