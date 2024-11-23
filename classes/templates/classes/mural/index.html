@@ -15,59 +15,11 @@
             <button class="btn btn-success">Crie sua mensagem</button>
         </a>
 
-        <!-- Exibir todas as mensagens principais e suas respostas -->
-        <ul>
+        <!-- Exibir todas as mensagens principais -->
+        <ul class="message-list">
             {% if mensagens %}
                 {% for mensagem in mensagens %}
-                    <li class="message">
-                        <!-- Exibir detalhes da mensagem -->
-                        <img src="{% static 'perfil.svg' %}" alt="Avatar do Usuário">
-                        <div class="message-content">
-                            <h4>{{ mensagem.usuario.username }}</h4>
-                            <p>{{ mensagem.conteudo }}</p>
-                            <small>Enviado em {{ mensagem.data_envio|date:"d/m/Y H:i" }}</small>
-
-                            <div class="message-divider"></div>
-
-                            <!-- Ações de mensagem -->
-                            <div class="message-action">
-                                <!-- Botão para responder -->
-                                <a href="{% url 'classes:responder_mensagem' Classe.id mensagem.id %}" class="btn btn-primary">Responder</a>
-                                <!-- Botão para apagar, se for o autor -->
-                                {% if user.username == mensagem.usuario.username %}
-                                    <a href="{% url 'classes:delete_message' Classe.id mensagem.id %}" class="btn btn-danger">Apagar</a>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <!-- Mostrar respostas -->
-                        {% with mensagem.respostas.all as respostas %}
-                        {% if respostas %}
-                            <ul class="response-list">
-                                {% for resposta in respostas %}
-                                    <li class="response">
-                                        <h5>{{ resposta.usuario.username }} respondeu a {{mensagem.conteudo}}:</h5>
-                                        <p>{{ resposta.conteudo }}</p>
-                                        <small>Enviado em {{ resposta.data_envio|date:"d/m/Y H:i" }}</small>
-
-                                        <!-- Ações de resposta -->
-                                        <div class="message-action">
-                                            <!-- Botão para responder -->
-                                            <a href="{% url 'classes:responder_mensagem' Classe.id resposta.id %}" class="btn btn-primary">Responder</a>
-                                            <!-- Botão para apagar, se for o autor -->
-                                            {% if user.username == resposta.usuario.username %}
-                                                <a href="{% url 'classes:delete_message' Classe.id resposta.id %}" class="btn btn-danger">Apagar</a>
-                                            {% endif %}
-                                        </div>
-
-                                        <!-- Chamada recursiva para exibir respostas das respostas -->
-                                        {% include 'classes/mural/respostas.html' with respostas=resposta.respostas.all %}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                        {% endwith %}
-                    </li>
+                    {% include 'classes/mural/mensagem_recursiva.html' with mensagem=mensagem classe=Classe %}
                 {% endfor %}
             {% else %}
                 <p>Ainda não existe nenhuma mensagem neste mural.</p>
