@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div class="page-atividade">
     <div class="content">
         <h2> Atividade ({{ Classe.idioma }}: Turma {{ Classe.turma }})</h2>
@@ -16,4 +17,9 @@
         <p><a href="{% url 'classes:atividades_index' Classe.id %}">Voltar para a seção de atividades da classe</a></p>
     </div>
 </div>
+{% else %}
+  <p>Você não está logado.</p>
+  <br>
+  <a href="{% url 'accounts:login' %}" class="botaozinho">Faça login aqui</a>
+{% endif %}
 {% endblock content %}

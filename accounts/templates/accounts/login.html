@@ -4,10 +4,11 @@
 
 {% block content %}
 <h1>Login</h1>
+<hr class="page-break">
 <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Entrar</button>
+    <button type="submit" class = 'botaozao'>Entrar</button>
 </form>
 <a href="{% url 'accounts:signup' %}" class="btn">Ainda não tem cadastro?</a> 
 <a href="{% url 'accounts:signup' %}" class="btn">Esqueceu sua senha?</a>

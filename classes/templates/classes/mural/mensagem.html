@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if user.is_authenticated %}
+
 <div class="page-mensagem">
     <div class="content">
         <h2>Mensagem ({{ Classe.idioma }}: Turma {{ Classe.turma }})</h2>
@@ -9,12 +11,14 @@
             <label for="conteudo">Conteúdo:</label>
             {{ form.conteudo }}
             
-            <label for="tipo">Tipo:</label>
-            {{ form.tipo }}
-            
             <button type="submit">Postar Mensagem</button>
             <p><a href="{% url 'classes:atividades_index' Classe.id %}">Voltar para o mural</a></p>
         </form>
     </div>
 </div>
+{% else %}
+  <p>Você não está logado.</p>
+  <br>
+  <a href="{% url 'accounts:login' %}" class="botaozinho">Faça login aqui</a>
+{% endif %}
 {% endblock content %}

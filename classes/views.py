@@ -22,6 +22,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import  Notificacao, Classe, Deck, Card, Mensagem, Arquivo
 from .forms import ClasseForm, ArquivoForm, DeckForm, CardForm, MensagemForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.utils.safestring import mark_safe
+import json
 
 class ClasseListView(ListView):
     model = Classe
@@ -162,6 +164,8 @@ class ClasseFlashcardsView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Adiciona os decks associados à classe
+        classe = self.object  # A classe atual
+        context['Classe'] = classe  # Disponibiliza o objeto Classe no contexto
         context['Deck_list'] = Deck.objects.filter(classe=self.object)
         return context
 
@@ -169,11 +173,10 @@ class ClasseFlashcardsCreate(CreateView):
     model = Deck
     form_class = DeckForm
     template_name = 'classes/flashcards/create.html'
-    success_url = reverse_lazy('classes:flashcards')
 
     def form_valid(self, form):
-        classe = get_object_or_404(Classe, pk=self.kwargs['pk'])  # Obtém a classe pelo pk
-        form.instance.classe = classe  # Associa o baralho à classe
+        classe = get_object_or_404(Classe, pk=self.kwargs['pk'])
+        form.instance.classe = classe
         form.instance.usuario = self.request.user
         form.instance.n_dominados = 0
         return super().form_valid(form)
@@ -182,10 +185,10 @@ class ClasseFlashcardsCreate(CreateView):
         context = super().get_context_data(**kwargs)
         context['Classe'] = get_object_or_404(Classe, pk=self.kwargs['pk'])
         return context
-    
+
     def get_success_url(self):
         return reverse_lazy('classes:flashcards', kwargs={'pk': self.kwargs['pk']})
-
+    
 class ClasseFlashcardsDelete(DeleteView):
     model = Deck
     template_name = 'classes/flashcards/delete.html'
@@ -201,7 +204,7 @@ class ClasseFlashcardsDelete(DeleteView):
 class CardCreateView(CreateView):
     model = Card
     form_class = CardForm
-    template_name = 'classes/cards/create_card.html'
+    template_name = 'classes/flashcards/cards/create.html'
 
     def form_valid(self, form):
         deck = get_object_or_404(Deck, pk=self.kwargs['deck_id'])
@@ -226,7 +229,9 @@ class DeckCardsView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cards'] = Card.objects.filter(deck=self.object)
+        # Serializa os cards
+        cards = Card.objects.filter(deck=self.object).values('lado_frente', 'lado_tras')
+        context['cards'] = mark_safe(json.dumps(list(cards)))  # Converte em JSON e marca como seguro
         return context
 
 class ClasseCreateView(CreateView):

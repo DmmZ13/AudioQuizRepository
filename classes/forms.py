@@ -45,19 +45,16 @@ class DeckForm(forms.ModelForm):
 class CardForm(forms.ModelForm):
     class Meta:
         model = Card
-        fields = ['lado_frente', 'lado_tras', 'dica_1', 'dica_2', 'dica_3', 'n_revisoes', 'maduro', 'data_ultima_revisao']
+        fields = ['lado_frente', 'lado_tras', 'dica_1', 'dica_2', 'dica_3']
         labels = {
             'lado_frente': 'Lado Frente',
             'lado_tras': 'Lado Trás',
             'dica_1': 'Dica 1',
             'dica_2': 'Dica 2',
             'dica_3': 'Dica 3',
-            'n_revisoes': 'Número de Revisões',
-            'maduro': 'Maduro',
-            'data_ultima_revisao': 'Última Revisão',
+
         }
         widgets = {
-            'data_ultima_revisao': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
 
 
@@ -65,14 +62,12 @@ class CardForm(forms.ModelForm):
 class MensagemForm(forms.ModelForm):
     class Meta:
         model = Mensagem
-        fields = ['conteudo', 'tipo', 'resposta_para']  # Removido 'usuario'
+        fields = ['conteudo', 'resposta_para']  # Removido 'usuario'
         labels = {
             'conteudo': 'Conteúdo',
-            'tipo': 'Tipo',
         }
         widgets = {
             'conteudo': forms.Textarea(attrs={'rows': 4, 'cols': 50}),
-            'tipo': forms.Select(choices=Mensagem.TIPOS),
             'resposta_para': forms.HiddenInput(),  # Oculto no formulário padrão
         }
 

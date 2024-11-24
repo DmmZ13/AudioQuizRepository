@@ -30,13 +30,14 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from .models import Usuario
+from .forms import UsuarioUpdateForm
 
 from django.shortcuts import render, redirect
 from .forms import UsuarioForm
 
 def registro_view(request):
     if request.method == 'POST':
-        form = UsuarioForm(request.POST)
+        form = UsuarioForm(request.POST, request.FILES)  # Inclua request.FILES
         if form.is_valid():
             form.save()
             return redirect('login')  # Redirecione para a página de login
@@ -46,3 +47,13 @@ def registro_view(request):
 
 class ProfileView(TemplateView):
     template_name = 'accounts/profile.html'
+
+def atualizar_perfil(request):
+    if request.method == 'POST':
+        form = UsuarioUpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:profile')  # Redireciona para o perfil após salvar
+    else:
+        form = UsuarioUpdateForm(instance=request.user)
+    return render(request, 'accounts/atualizar_perfil.html', {'form': form})

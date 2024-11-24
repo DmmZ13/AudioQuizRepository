@@ -2,25 +2,24 @@
 
 <li class="message">
     <div class="message-content">
-        <img src="{% static 'perfil.svg' %}" alt="Avatar do Usuário">
-        
-        <!-- Verifica se a mensagem é uma resposta -->
-        {% if tem_respostas == 1 %}
-            <h4>{{ mensagem.usuario.username }} respondeu a "{{ mensagem_anterior.conteudo }}": </h4>
-        {% else %}
-            <h4>{{ mensagem.usuario.username }}</h4>
-        {% endif %}
+        <div>
+            {% if mensagem.usuario.poster%}
+            <img src="{{ mensagem.usuario.poster.url }}" alt="Foto de Perfil"><br>
+            {% else %}
+            <img src="{% static 'perfil.svg' %}" alt="Imagem Padrão"><br>
+             {% endif %}  
+        </div>
+        <h4>{{ mensagem.usuario.username }}</h4>
+
         
         <p>{{ mensagem.conteudo }}</p>
         <small>Enviado em {{ mensagem.data_envio|date:"d/m/Y H:i" }}</small>
 
         <!-- Ações de mensagem -->
         <div class="message-action">
-            <!-- Botão para responder -->
-            <a href="{% url 'classes:responder_mensagem' classe.id mensagem.id %}" class="btn btn-primary">Responder</a>
-            <!-- Botão para apagar, se for o autor -->
+            <a href="{% url 'classes:responder_mensagem' classe.id mensagem.id %}" class="btn">Responder</a>
             {% if user.username == mensagem.usuario.username %}
-                <a href="{% url 'classes:delete_message' classe.id mensagem.id %}" class="btn btn-danger">Apagar</a>
+                <a href="{% url 'classes:delete_message' classe.id mensagem.id %}" class="btn-delete">Apagar</a>
             {% endif %}
         </div>
     </div>

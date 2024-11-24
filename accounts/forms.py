@@ -49,3 +49,28 @@ class UsuarioForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+# accounts/forms.py
+from django import forms
+from .models import Usuario
+
+class UsuarioUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['username', 'email', 'first_name', 'last_name', 'tipo', 'poster']  # Campos que podem ser atualizados
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'tipo': forms.Select(choices=[(True, "Professor"), (False, "Aluno")], attrs={'class': 'form-control'}),
+            'poster': forms.FileInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'username': "Nome de Usuário",
+            'email': "E-mail",
+            'first_name': "Primeiro Nome",
+            'last_name': "Sobrenome",
+            'tipo': "Tipo de Usuário",
+            'poster': "Imagem de Perfil",
+        }

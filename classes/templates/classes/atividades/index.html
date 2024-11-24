@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <html lang="en">
     <div class="atividades-page">
         {% if user.is_authenticated %}
@@ -14,7 +15,7 @@
             <section>
                 {% if user.tipo == 1 %}
                 <a href="{% url 'classes:atividades_create' Classe.id %}">
-                    <button>Crie sua atividade</button>
+                    <button class="botaozao" >Crie sua atividade</button>
                 </a>
                 {% endif %}
                 <ul>
@@ -26,15 +27,16 @@
                                 {{ arquivo.nome }}
                             </blockquote>
                             <figcaption>Upload dia {{ arquivo.data_upload|date:"d/m/Y" }}</figcaption>
-                            <a href="{% url 'classes:download_pdf' arquivo.id %}" class="btn">
+                            <a href="{% url 'classes:download_pdf' arquivo.id %}" class="botaozinho">
                                 Baixar Arquivo
                             </a>
                             {% if user.tipo == 1 %}
-                                <div class="delete-activity">
-                                    <a href="{% url 'classes:atividades_delete' arquivo.id %}">Apagar Arquivo</a>
+                                <div>
+                                <a href="{% url 'classes:atividades_update' arquivo.id %}" class="botaozinho">Alterar Nome do Arquivo</a>
+                                <a href="{% url 'classes:atividades_delete' arquivo.id %}" class = "delete-button">Apagar Arquivo</a>
                                 </div>
                             {% endif %}
-                            <a href="{% url 'classes:atividades_update' arquivo.id %}">Alterar Nome do Arquivo</a>
+                            
                         </figure>
                         {% endfor %}
                     {% else %}
@@ -47,4 +49,9 @@
         {% endif %}
     </div>
 </html>
+{% else %}
+  <p>Você não está logado.</p>
+  <br>
+  <a href="{% url 'accounts:login' %}" class="botaozinho">Faça login aqui</a>
+{% endif %}
 {% endblock content %}
