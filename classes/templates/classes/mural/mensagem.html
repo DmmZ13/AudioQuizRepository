@@ -5,15 +5,17 @@
 
 <div class="page-mensagem">
     <div class="content">
-        <h2>Mensagem ({{ Classe.idioma }}: Turma {{ Classe.turma }})</h2>
+        <h3>Escreva sua mensagem</h3>
         <form method="post">
             {% csrf_token %}
             <label for="conteudo">Conteúdo:</label>
             {{ form.conteudo }}
             
             <button type="submit">Postar Mensagem</button>
-            <p><a href="{% url 'classes:atividades_index' Classe.id %}">Voltar para o mural</a></p>
         </form>
+        <p class="voltar">
+            <a href="{% url 'classes:atividades_index' Classe.id %}" class="botaozinho">Voltar</a>
+        </p>
     </div>
 </div>
 {% else %}

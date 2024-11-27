@@ -6,7 +6,7 @@
 <form method="post">
     {% csrf_token %}
     <p>Você tem certeza que deseja excluir o baralho "{{ deck.nome }} ({{ deck.classe.idioma }})"?</p>
-    <button class= "btn-delete" type="submit">Excluir</button>
+    <button class= "delete-button" type="submit">Excluir</button>
 </form>
 {% else %}
   <p>Você não está logado.</p>

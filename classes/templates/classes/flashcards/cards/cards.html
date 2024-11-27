@@ -1,113 +1,51 @@
 {% extends 'base.html' %}
 {% block content %}
-{% if user.is_authenticated %}
 <div class="deck-page">
   <div class="deck-container">
-    <h1>{{ deck.nome }}</h1>
+    <h1>{{ deck.nome }}</h1> <!-- Nome do deck ao qual o card pertence -->
     <div class="card-display">
       <div id="card" class="card" onclick="flipCard()">
         <div class="card-content">
-          <p id="card-content">
-            {% if cards %}
-                {{ cards.0.lado_frente }}
-            {% else %}
-                Nenhum card disponível.
-            {% endif %}
-          </p>
+          <p id="card-content">{{ card.lado_frente }}</p> <!-- Frente do card -->
         </div>
       </div>
-      <p class="card-hint" id="card-hint">Clique no cartão para virá-lo</p>
+      <p class="card-hint" id="card-hint">Clique no cartão para virá-lo →</p>
     </div>
     <div class="controls">
-      <button id="prev-card-btn" class="control-btn" onclick="prevCard()">←</button>
-      <button id="next-card-btn" class="control-btn" onclick="nextCard()">→</button>
+      {% if prev_card %}
+      <a href="{% url 'classes:cards' deck.id prev_card.id %}" class="action-btn">←</a>
+      {% endif %}
     </div>
     <div class="actions">
-      <button id="incorrect-btn" class="action-btn">✘</button>
+      <form method="post" action="{% url 'classes:naomaduroeproximo' deck.id card.id %}">
+        {% csrf_token %}
+        <button type="submit" class="action-btn">✘</button>
+      </form>
       <button id="mic-btn" class="action-btn">🎤</button>
-      <button id="correct-btn" class="action-btn">✔</button>
+        <form method="post" action="{% url 'classes:maduroeproximo' deck.id card.id %}">
+          {% csrf_token %}
+        <button type="submit" class="action-btn">✔</button>
+       </form>
     </div>
     <a href="{% url 'classes:create_card' deck.id %}" class="add-card-btn">Adicionar Novo Card</a>
   </div>
 </div>
 
-<script id="cards-data" type="application/json">
-    {{ cards|safe }}
-</script>
-
 <script>
-    // Verificação e inicialização da variável cards
-    let cards; // Declare `cards` apenas uma vez.
-  
-    const rawCards = document.getElementById('cards-data').textContent;
-  
-    try {
-        cards = JSON.parse(rawCards); // Tenta transformar o JSON do script em um array
-    } catch (e) {
-        console.error('Erro ao analisar JSON:', e); // Loga o erro caso o JSON esteja malformado
-        cards = []; // Inicializa como lista vazia se houver erro
-    }
-  
-    console.log('Cards carregados:', cards); // Para verificar no console do navegador
-  
-    // Outras variáveis globais necessárias
-    let currentIndex = 0;
-    const cardContent = document.getElementById('card-content');
-    const cardHint = document.getElementById('card-hint');
-    let isFront = true;
-  
-    // Funções
-    function updateCard() {
-        if (cards.length > 0) {
-            const card = cards[currentIndex];
-            cardContent.textContent = isFront ? card.lado_frente : card.lado_tras;
-            cardHint.textContent = isFront
-                ? "Clique no cartão para virá-lo →"
-                : "Clique novamente para voltar →";
-        } else {
-            cardContent.textContent = "Nenhum card disponível";
-            cardHint.textContent = "";
-        }
-    }
-  
-    function flipCard() {
-        isFront = !isFront;
-        updateCard();
-    }
-  
-    function nextCard() {
-        console.log('Avançando para o próximo card...');
-        console.log('Índice atual antes de avançar:', currentIndex);
-  
-        if (currentIndex < cards.length - 1) {
-            currentIndex++;
-            console.log('Índice atual depois de avançar:', currentIndex);
-            updateCard();
-        } else {
-            console.log('Você já está no último card.');
-        }
-    }
-  
-    function prevCard() {
-        console.log('Voltando para o card anterior...');
-        console.log('Índice atual antes de voltar:', currentIndex);
-  
-        if (currentIndex > 0) {
-            currentIndex--;
-            console.log('Índice atual depois de voltar:', currentIndex);
-            updateCard();
-        } else {
-            console.log('Você já está no primeiro card.');
-        }
-    }
-  
-    // Inicializa o primeiro card
-    updateCard();
-  </script>
+  let isFront = true;
 
-{% else %}
-  <p>Você não está logado.</p>
-  <br>
-  <a href="{% url 'accounts:login' %}" class="botaozinho">Faça login aqui</a>
-{% endif %}
+  function flipCard() {
+    const cardContent = document.getElementById("card-content");
+    const cardHint = document.getElementById("card-hint");
+
+    if (isFront) {
+      cardContent.textContent = "{{ card.lado_tras }}"; // Verso do card
+      cardHint.textContent = "Clique novamente para voltar →";
+    } else {
+      cardContent.textContent = "{{ card.lado_frente }}"; // Frente do card
+      cardHint.textContent = "Clique no cartão para virá-lo →";
+    }
+    isFront = !isFront;
+  }
+</script>
 {% endblock content %}

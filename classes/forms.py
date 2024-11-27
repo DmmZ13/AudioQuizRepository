@@ -34,10 +34,10 @@ class ClasseForm(forms.ModelForm):
 class DeckForm(forms.ModelForm):
     class Meta:
         model = Deck
-        fields = ['nome', 'n_cartoes']
+        fields = ['nome', 'idioma']
         labels = {
             'nome': 'Nome do Deck',
-            'n_cartoes': 'Número de Cartões',
+            "idioma": "Idioma do Deck"
         }
 
 

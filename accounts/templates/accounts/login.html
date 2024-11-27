@@ -3,6 +3,8 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+
+<div Class="page-form">
 <h1>Login</h1>
 <hr class="page-break">
 <form method="post" action="{% url 'login' %}">
@@ -12,4 +14,6 @@
 </form>
 <a href="{% url 'accounts:signup' %}" class="btn">Ainda não tem cadastro?</a> 
 <a href="{% url 'accounts:signup' %}" class="btn">Esqueceu sua senha?</a>
+</div>
+
 {% endblock %}

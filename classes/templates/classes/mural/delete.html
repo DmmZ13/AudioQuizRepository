@@ -5,10 +5,12 @@
 <form action="{% url 'classes:delete_message' Classe.id mensagem.id %}" method="post">
     {% csrf_token %}
     <p>
-      Você tem certeza que deseja apagar a mensagem "{{ mensagem.conteudo }}"?
+      Você tem certeza que deseja apagar a mensagem?
     </p>
-    <button type="submit">Apagar</button>
+    <button type="submit" class = "delete-button">Apagar</button>
   </form>
+  <br>
+  <p><a href = "{%url 'classes:mural' Classe.id%}" class = "botaozinho">Voltar</a></p>
 {% else %}
   <p>Você não está logado.</p>
   <br>

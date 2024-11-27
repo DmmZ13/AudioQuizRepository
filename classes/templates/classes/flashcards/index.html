@@ -22,20 +22,37 @@
 
         <section class="lista-de-cards">
           {% for Deck in Deck_list %}
-          <article class="card">
-            <a href="{% url 'classes:cards' Deck.id %}">
-              <img src="{{ Classe.poster_url }}" alt="Poster do {{ Classe.idioma }}" />
-            </a>
-            <p><strong>{{ Deck.nome }}</strong></p>
-            <p><strong>{{ Deck.n_cartoes }} cards</strong></p>
-            <p>{{ Deck.idioma }}</p>
-            <p>{{ Deck.n_dominados }} dominados</p>
-            <p>{{ Deck.n_aprender }} a dominar</p>
-            <div class="acoes">
-              <a class="editar">Editar Deck</a>
-              <a href="{% url 'classes:delete_flashcards' Classe.id Deck.id %}" class="apagar">Apagar Deck</a>
-            </div>
-          </article>
+            {% if Deck.card_set.exists %}
+              <article class="card">
+                  <a href="{% url 'classes:cards' Deck.id Deck.card_set.first.id %}">
+                    <img src="{{ Classe.poster_url }}" alt="Poster do {{ Classe.idioma }}" />
+                  </a>
+                  <p><strong>{{ Deck.nome }}</strong></p>
+                  <p><strong>{{ Deck.n_cartoes }} cards</strong></p>
+                  <p>{{ Deck.idioma }}</p>
+                  <p>{{ Deck.n_dominados }} dominados</p>
+                  <p>{{ Deck.n_aprender }} a dominar</p>
+                  <div class="acoes">
+                    <a href="{% url 'classes:cards_in_deck' Deck.id %}" class="editar">Editar Deck</a>
+                    <a href="{% url 'classes:delete_flashcards' Classe.id Deck.id %}" class="apagar">Apagar Deck</a>
+                  </div>
+                </article>
+            {% else %}
+                <article class="card">
+                  <a href="{% url 'classes:create_card' Deck.id %}">
+                    <img src="{{ Classe.poster_url }}" alt="Poster do {{ Classe.idioma }}" />
+                  </a>
+                  <p><strong>{{ Deck.nome }}</strong></p>
+                  <p><strong>{{ Deck.n_cartoes }} cards</strong></p>
+                  <p>{{ Deck.idioma }}</p>
+                  <p>{{ Deck.n_dominados }} dominados</p>
+                  <p>{{ Deck.n_aprender }} a dominar</p>
+                  <div class="acoes">
+                    <a class="editar">Editar Deck</a>
+                    <a href="{% url 'classes:delete_flashcards' Classe.id Deck.id %}" class="apagar">Apagar Deck</a>
+                  </div>
+                </article>
+              {% endif %}
           {% endfor %}
           {% if user.tipo == 1 %}
           <article class="card">

@@ -7,8 +7,11 @@
   <p>
     Você tem certeza que deseja apagar a classe "{{ classe.turma }}"?
   </p>
-  <button type="submit">Apagar</button>
+  <button type="submit" class = "delete-button">Apagar</button>
 </form>
+<br>
+<p><a href="{% url 'classes:index'%}" class = "botaozinho">Voltar</a></p>
+
 {% else %}
   <p>Você não está logado.</p>
   <br>

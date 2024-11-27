@@ -34,8 +34,15 @@ class Deck(models.Model):
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE)
     nome = models.CharField(max_length=255)
     idioma = models.CharField(max_length=255)
-    n_cartoes = models.IntegerField()
-    n_dominados = models.IntegerField(default=0)
+    
+    @property
+    def n_dominados(self):
+        return self.card_set.filter(maduro=True).count()
+
+    @property
+    def n_cartoes(self):
+        return self.card_set.count()
+
 
     @property
     def n_aprender(self):
@@ -46,7 +53,7 @@ class Deck(models.Model):
 
 
 class Card(models.Model):
-    deck = models.ForeignKey(Deck, on_delete=models.CASCADE)
+    deck = models.ForeignKey(Deck, on_delete=models.CASCADE, )
     lado_frente = models.CharField(max_length=255)
     lado_tras = models.CharField(max_length=255)
     dica_1 = models.CharField(max_length=255, blank=True, null=True)

@@ -3,11 +3,13 @@
 {% block title %}Registrar{% endblock %}
 
 {% block content %}
+<div Class="page-form">
 <h1>Registrar-se</h1>
 <hr class="page-break">
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class = "botaozao">Registrar</button>
+    <button type="submit" class="botaozao">Registrar</button>
 </form>
+</div>
 {% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Cards do Deck "{{ deck.nome }}"</h1>
+
+{% if cards %}
+    <ul>
+        {% for card in cards %}
+            <li>
+                <a href="{% url 'classes:cards' deck.id card.id %}">
+                    {{ card.lado_frente }} -- {{ card.lado_frente }}
+                </a>
+                <a href="{% url 'classes:cards_in_deck' deck.id %}" class="editar">Editar Deck</a>
+                <a href="{% url 'classes:delete_flashcards' deck.classe.id deck.id %}" class="apagar">Apagar Deck</a>
+            </li>
+        {% endfor %}
+    </ul>
+    {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">Primeira</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Próxima</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Última</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% else %}
+    <p>Nenhum card disponível neste deck.</p>
+    <a href="{% url 'classes:create_card' deck.id %}" class="botaozinho">Criar o Primeiro Card</a>
+{% endif %}
+{% endblock content %}

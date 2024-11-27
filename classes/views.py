@@ -24,6 +24,8 @@ from .forms import ClasseForm, ArquivoForm, DeckForm, CardForm, MensagemForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils.safestring import mark_safe
 import json
+from django.http import JsonResponse
+from django.utils.timezone import now
 
 class ClasseListView(ListView):
     model = Classe
@@ -175,10 +177,13 @@ class ClasseFlashcardsCreate(CreateView):
     template_name = 'classes/flashcards/create.html'
 
     def form_valid(self, form):
+        """
+        Define a classe e o usuário associados ao deck e salva.
+        """
         classe = get_object_or_404(Classe, pk=self.kwargs['pk'])
         form.instance.classe = classe
         form.instance.usuario = self.request.user
-        form.instance.n_dominados = 0
+        self.object = form.save()  # Salva e armazena o objeto criado
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -187,7 +192,10 @@ class ClasseFlashcardsCreate(CreateView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('classes:flashcards', kwargs={'pk': self.kwargs['pk']})
+        """
+        Redireciona para a página de flashcards da classe.
+        """
+        return reverse_lazy('classes:flashcards', kwargs={'pk': self.object.classe.pk})
     
 class ClasseFlashcardsDelete(DeleteView):
     model = Deck
@@ -207,31 +215,69 @@ class CardCreateView(CreateView):
     template_name = 'classes/flashcards/cards/create.html'
 
     def form_valid(self, form):
+        """
+        Define o deck associado ao card e salva.
+        """
         deck = get_object_or_404(Deck, pk=self.kwargs['deck_id'])
         form.instance.deck = deck
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
+        """
+        Adiciona o deck ao contexto.
+        """
         context = super().get_context_data(**kwargs)
         context['deck'] = get_object_or_404(Deck, pk=self.kwargs['deck_id'])
         return context
 
     def get_success_url(self):
-        return reverse_lazy('classes:cards', kwargs={'deck_id': self.kwargs['deck_id']})
+        """
+        Redireciona para o deck após criar o card.
+        """
+        return reverse_lazy('classes:cards', kwargs={
+            'deck_id': self.kwargs['deck_id'],
+            'pk': self.object.pk
+        })
 
-class DeckCardsView(DetailView):
-    model = Deck
-    template_name = 'classes/flashcards/cards/cards.html'
-    context_object_name = 'deck'
 
-    def get_object(self, queryset=None):
-        return get_object_or_404(Deck, pk=self.kwargs['deck_id'])
+class CardDetailView(DetailView):
+    model = Card
+    template_name = "classes/flashcards/cards/cards.html"
+    context_object_name = "card"
+
+    def get_object(self):
+        """Sobrescreve get_object para retornar um card específico ou o primeiro do deck."""
+        deck_id = self.kwargs['deck_id']
+        pk = self.kwargs.get('pk')
+
+        # Se um ID de card for fornecido, tenta buscar por ele
+        if pk:
+            return get_object_or_404(Card, pk=pk, deck_id=deck_id)
+
+        # Caso contrário, retorna o primeiro card do deck
+        deck = get_object_or_404(Deck, pk=deck_id)
+        first_card = deck.card_set.first()
+        if not first_card:
+            raise Http404("Nenhum card disponível neste deck.")
+        return first_card
 
     def get_context_data(self, **kwargs):
+        """Adiciona navegação ao contexto e verifica se o deck possui cards."""
         context = super().get_context_data(**kwargs)
-        # Serializa os cards
-        cards = Card.objects.filter(deck=self.object).values('lado_frente', 'lado_tras')
-        context['cards'] = mark_safe(json.dumps(list(cards)))  # Converte em JSON e marca como seguro
+        card = self.get_object()
+        deck = card.deck
+
+        # Próximo card
+        next_card = deck.card_set.filter(id__gt=card.id).first()
+
+        # Card anterior
+        prev_card = deck.card_set.filter(id__lt=card.id).last()
+
+        # Adiciona deck e navegação ao contexto
+        context['deck'] = deck
+        context['next_card'] = next_card  # None se não houver próximo
+        context['prev_card'] = prev_card  # None se não houver anterior
+        context['has_cards'] = deck.card_set.exists()  # Verifica se o deck tem cards
         return context
 
 class ClasseCreateView(CreateView):
@@ -323,3 +369,81 @@ def recusar_convite(request, notificacao_id):
 
     # Redireciona o usuário para uma página apropriada (ex: página inicial ou painel de notificações)
     return redirect('classes:index')  # Substitua pelo nome correto da URL
+
+def marcar_maduro_proximo(request, deck_id, pk):
+    """
+    Marca o card como maduro, atualiza a data de última revisão,
+    e redireciona para o próximo card ou para a página de flashcards da classe.
+    """
+    if request.method == "POST":
+        card = get_object_or_404(Card, pk=pk, deck_id=deck_id)
+
+        # Atualiza o card atual
+        card.maduro = True
+        card.data_ultima_revisao = now()
+        card.save()
+
+        # Busca o próximo card
+        next_card = card.deck.card_set.filter(id__gt=card.id).first()
+
+        # Identifica a classe associada ao deck
+        deck = card.deck
+        classe_id = deck.classe.id  # Substitua pelo campo correto que liga Deck à Classe
+
+        # Redireciona para o próximo card ou para a página de flashcards da classe
+        if next_card:
+            return redirect('classes:cards', deck_id=deck.id, pk=next_card.id)
+        else:
+            return redirect('classes:flashcards', pk=classe_id)  # Para flashcards da classe
+
+    return redirect('classes:cards', deck_id=deck_id, pk=pk)
+
+def desmarcar_maduro_proximo(request, deck_id, pk):
+    """
+    Desmarca o card como maduro, atualiza a data de última revisão,
+    e redireciona para o próximo card ou para a página de flashcards da classe.
+    """
+    if request.method == "POST":
+        card = get_object_or_404(Card, pk=pk, deck_id=deck_id)
+
+        # Atualiza o card atual
+        card.maduro = False
+        card.data_ultima_revisao = now()
+        card.save()
+
+        # Busca o próximo card
+        next_card = card.deck.card_set.filter(id__gt=card.id).first()
+
+        # Identifica a classe associada ao deck
+        deck = card.deck
+        classe_id = deck.classe.id  # Substitua pelo campo correto que liga Deck à Classe
+
+        # Redireciona para o próximo card ou para a página de flashcards da classe
+        if next_card:
+            return redirect('classes:cards', deck_id=deck.id, pk=next_card.id)
+        else:
+            return redirect('classes:flashcards', pk=classe_id)  # Para flashcards da classe
+
+    return redirect('classes:cards', deck_id=deck_id, pk=pk)
+
+class CardsInDeckListView(ListView):
+    model = Card
+    template_name = "classes/flashcards/cards/cards_list.html"  # Substitua pelo nome do seu template
+    context_object_name = "cards"
+    paginate_by = 10  # Número de cards por página (opcional)
+
+    def get_queryset(self):
+        """
+        Filtra os cards pelo deck fornecido na URL.
+        """
+        deck = get_object_or_404(Deck, pk=self.kwargs['deck_id'])
+        return Card.objects.filter(deck=deck)
+
+    def get_context_data(self, **kwargs):
+        """
+        Adiciona o deck ao contexto.
+        """
+        context = super().get_context_data(**kwargs)
+        context['deck'] = get_object_or_404(Deck, pk=self.kwargs['deck_id'])
+        return context
+

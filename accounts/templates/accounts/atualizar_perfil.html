@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
+<div class="page-form">
     <h2>Atualizar Perfil</h2>
+    <hr Class="page-break">
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="botaozao">Salvar Alterações</button>
+        <button type="submit" class="botaozinho">Salvar Alterações</button>
     </form>
-    <p><a href="{% url 'accounts:profile' %}">Voltar para o perfil</a></p>
+    <a href="{% url 'accounts:profile' %}" Class = "botaozinho">Voltar</a>
 </div>
 {% endblock content %}

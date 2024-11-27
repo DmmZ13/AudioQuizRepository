@@ -2,14 +2,16 @@
 
 {% block content %}
 {% if user.is_authenticated %}
+<div Class="page-form">
 <h2>Editar Atividade: {{ atividade.nome }}</h2>
-
+<hr Class="page-break">
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-    <a href="{% url 'classes:atividades_index' atividade.classe.id %}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="botaozinho">Salvar Alterações</button>
+    <a href="{% url 'classes:atividades_index' atividade.classe.id %}" class="botaozinho">Cancelar</a>
 </form>
+</div>
 {% else %}
   <p>Você não está logado.</p>
   <br>

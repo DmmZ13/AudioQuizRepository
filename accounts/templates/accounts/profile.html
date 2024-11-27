@@ -5,72 +5,58 @@
 
 {% if user.is_authenticated %}
 <div class="container profile-page">
-    <header class="profile-header">
-        {% if user.poster%}
-        <img src="{{ user.poster.url }}" alt="Foto de Perfil" class="profile-picture"><br>
+    <!-- Informações do usuário -->
+    <div class="profile-info">
+        {% if user.poster %}
+        <img src="{{ user.poster.url }}" alt="Foto de Perfil" class="profile-picture">
         {% else %}
-        <img src="{% static 'perfil.svg' %}" alt="Imagem Padrão" class="profile-picture"><br>
-         {% endif %}
+        <img src="{% static 'perfil.svg' %}" alt="Imagem Padrão" class="profile-picture">
+        {% endif %}
+        <h2>Bem-vindo, {{ user.username }}</h2>
+    </div>
 
-        <h1>Bem-vindo, {{ user.username }}</h1>
-    </header>
-
+    <!-- Conteúdo principal -->
     <div class="content">
-        <!-- Dados Pessoais -->
         <section class="personal-info">
             <h2>Dados Pessoais</h2>
-            <div>
-                <p><strong>Nome:</strong> {{ user.username }}</p>
-                <p><strong>Email:</strong> {{ user.email }}</p>
-                <p><strong>Senha:</strong> ************</p>
-            </div>
+            <p><strong>Nome:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Senha:</strong> ************</p>
             <a href="{% url 'accounts:atualizar_perfil' %}" class="btn btn-primary">Alterar</a>
         </section>
 
-        <!-- Estatísticas -->
         <section class="stats">
             <h2>Estatísticas</h2>
             {% if user.tipo == 0 %}
             <!-- Estatísticas para Aluno -->
             <div class="stat-item">
                 <h3>Progresso</h3>
-                <p>Progresso Geral: <strong>75%</strong></p>
-                <p>Turmas Matriculadas: <strong>3</strong></p>
-            </div>
-            <div class="stat-item">
-                <h3>Flashcards</h3>
-                <p>Revisados: <strong>120</strong></p>
-            </div>
-            <div class="stat-item">
-                <h3>Atividades</h3>
-                <p>Concluídas: <strong>15</strong></p>
-                <p>Pendentes: <strong>2</strong></p>
+                <p>Total de Turmas Matriculadas: <strong>{{ user.classe_set.count }}</strong></p>
+                <p>Cartões Dominados: <strong>{{ total_cartoes_dominados }}</strong></p>
             </div>
             {% elif user.tipo == 1 %}
             <!-- Estatísticas para Professor -->
             <div class="stat-item">
                 <h3>Classes</h3>
-                <p>Total de Classes: <strong>10</strong></p>
-                <p>Alunos Matriculados: <strong>20</strong></p>
+                <p>Total de Classes: <strong>{{ user.classe_set.count }}</strong></p>
+                <p>Alunos Matriculados: <strong>{{ total_alunos }}</strong></p>
+                <br>
+                <a href="{% url 'accounts:lista_alunos' %}" class="botaozinho">Ver Lista de Alunos</a>
             </div>
             <div class="stat-item">
                 <h3>Uploads</h3>
-                <p>PDFs: <strong>78</strong></p>
-                <p>Vídeos: <strong>26</strong></p>
-            </div>
-            <div class="stat-item">
-                <h3>Flashcards</h3>
-                <p>Flashcards Criados: <strong>535</strong></p>
+                <p>Total de Arquivos Enviados: <strong>{{ total_arquivos }}</strong></p>
             </div>
             {% endif %}
         </section>
+        
+        
     </div>
 
     <a href="{% url 'logout' %}" class="btn btn-secondary logout-btn">Logout</a>
 </div>
 {% else %}
-  <p>Você não está logado.</p>
-  <br>
-  <a href="{% url 'accounts:login' %}" class="botaozinho">Faça login aqui</a>
+<p>Você não está logado.</p>
+<a href="{% url 'accounts:login' %}" class="btn">Faça login aqui</a>
 {% endif %}
 {% endblock content %}

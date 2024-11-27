@@ -1,12 +1,15 @@
 {% extends 'base.html' %} {% block content %}
 {% if user.is_authenticated %}
+<div Class="page-form">
 <h2>Novo Baralho</h2>
+<hr class = "page-break">
 <form method="POST" action="{% url 'classes:create_flashcards' Classe.id %}" enctype="multipart/form-data">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit">Criar</button>
+  <button type="submit" class="botaozinho">Criar</button>
+  <a href="{% url 'classes:flashcards' Classe.id %}" Class = "botaozinho">Voltar</a>
 </form>
-<p><a href="{% url 'classes:flashcards' Classe.id %}">Voltar para a seção de flashcards</a></p>
+</div>
 {% else %}
   <p>Você não está logado.</p>
   <br>
