@@ -165,10 +165,17 @@ class ClasseFlashcardsView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Adiciona os decks associados à classe
-        classe = self.object  # A classe atual
-        context['Classe'] = classe  # Disponibiliza o objeto Classe no contexto
-        context['Deck_list'] = Deck.objects.filter(classe=self.object)
+        classe = self.object  # A classe atual (detalhe sendo exibido)
+
+        # Adiciona a Classe ao contexto
+        context['Classe'] = classe
+
+        # Filtra decks associados à classe, ao usuário logado e ao tipo de usuário
+        if self.request.user.tipo == 0:  # Garante que o filtro é feito apenas para tipo 0
+            context['Deck_list'] = Deck.objects.filter(classe=classe, usuario=self.request.user)
+        else:
+            context['Deck_list'] = Deck.objects.filter(classe=classe)  # Nenhum deck se o tipo não for 0
+
         return context
 
 class ClasseFlashcardsCreate(CreateView):
@@ -447,3 +454,52 @@ class CardsInDeckListView(ListView):
         context['deck'] = get_object_or_404(Deck, pk=self.kwargs['deck_id'])
         return context
 
+class CardDeleteView(DeleteView):
+    model = Card
+    template_name = 'classes/flashcards/cards/delete.html'
+
+    def get_object(self, queryset=None):
+        """
+        Recupera o objeto Card usando o card_id da URL.
+        """
+        card_id = self.kwargs.get('card_id')
+        return get_object_or_404(Card, pk=card_id)
+
+    def get_context_data(self, **kwargs):
+        """
+        Adiciona informações do Deck ao contexto.
+        """
+        context = super().get_context_data(**kwargs)
+        context['deck'] = get_object_or_404(Deck, pk=self.kwargs['deck_id'])
+        return context
+
+    def get_success_url(self):
+        """
+        Redireciona para a lista de cards no deck após a exclusão.
+        """
+        return reverse_lazy('classes:cards_in_deck', kwargs={'deck_id': self.object.deck.id})
+    
+class CardUpdateView(UpdateView):
+    model = Card
+    form_class = CardForm
+    template_name = 'classes/flashcards/cards/update.html'
+
+    def form_valid(self, form):
+        """
+        Confirma as alterações feitas no card e mantém o deck associado.
+        """
+        deck = get_object_or_404(Deck, pk=self.kwargs['deck_id'])
+        form.instance.deck = deck
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        """
+        Adiciona o deck ao contexto para o template.
+        """
+        context = super().get_context_data(**kwargs)
+        context['deck'] = get_object_or_404(Deck, pk=self.kwargs['deck_id'])
+        return context
+
+    def get_success_url(self):
+        # Redireciona de volta para o mural da classe
+        return reverse_lazy('classes:cards_in_deck', kwargs={'deck_id': self.kwargs['deck_id']})

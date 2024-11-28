@@ -8,10 +8,10 @@
         {% for card in cards %}
             <li>
                 <a href="{% url 'classes:cards' deck.id card.id %}">
-                    {{ card.lado_frente }} -- {{ card.lado_frente }}
+                    {{ card.lado_frente }} -- {{ card.lado_tras }}
                 </a>
-                <a href="{% url 'classes:cards_in_deck' deck.id %}" class="editar">Editar Deck</a>
-                <a href="{% url 'classes:delete_flashcards' deck.classe.id deck.id %}" class="apagar">Apagar Deck</a>
+                <a href="{% url 'classes:update_card' deck.id card.id%}" class="editar">Editar Card</a>
+                <a href="{% url 'classes:delete_card' deck.id card.id%}" class="apagar">Apagar Card</a>
             </li>
         {% endfor %}
     </ul>
@@ -33,5 +33,6 @@
 {% else %}
     <p>Nenhum card disponível neste deck.</p>
     <a href="{% url 'classes:create_card' deck.id %}" class="botaozinho">Criar o Primeiro Card</a>
+    <a href="{% url 'classes:flashcards' deck.classe.id %}" class = "botaozinho">Voltar</a>
 {% endif %}
 {% endblock content %}

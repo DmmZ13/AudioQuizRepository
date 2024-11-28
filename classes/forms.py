@@ -34,10 +34,9 @@ class ClasseForm(forms.ModelForm):
 class DeckForm(forms.ModelForm):
     class Meta:
         model = Deck
-        fields = ['nome', 'idioma']
+        fields = ['nome']
         labels = {
             'nome': 'Nome do Deck',
-            "idioma": "Idioma do Deck"
         }
 
 
